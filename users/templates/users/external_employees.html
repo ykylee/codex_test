@@ -2,16 +2,14 @@
 <link rel="stylesheet" href="{% static 'users/table.css' %}">
 <table class="table">
     <tr>
-        <th>Name</th>
-        <th>Employee ID</th>
-        <th>Department</th>
+        <th>Username</th>
+        <th>Full name</th>
         <th>Employed</th>
     </tr>
     {% for emp in employees %}
     <tr>
-        <td>{{ emp.name }}</td>
-        <td>{{ emp.employee_id }}</td>
-        <td>{{ emp.department }}</td>
+        <td>{{ emp.username }}</td>
+        <td>{{ emp.full_name }}</td>
         <td>{{ emp.is_employed }}</td>
     </tr>
     {% endfor %}

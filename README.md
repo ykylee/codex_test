@@ -1,11 +1,11 @@
 # User Management Example
 
-This project demonstrates a simple Django application that synchronizes an external employee database with Atlassian Crowd.
+This project is a minimal Django application that compares employees from an external database with the active users in Atlassian Crowd.
 
 ## Setup
 
 ```bash
-pip install django requests
+pip install -r requirements.txt
 python manage.py migrate
 ```
 
@@ -15,24 +15,24 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Visit `/compare/` to view the comparison page.
+Visit `/compare/` to view the comparison table.
+Additional pages:
+
+- `/employees/` shows the list of external employees.
+- `/crowd_users/` lists active Crowd users along with employment status.
+
+## Synchronizing Crowd Users
+
+The `sync_crowd_users` management command disables Crowd accounts that are not present in the external database:
+
+```bash
+python manage.py sync_crowd_users
+```
 
 ## Testing with coverage
-
-To run the unit tests and generate a coverage report:
 
 ```bash
 pip install coverage
 coverage run manage.py test
 coverage report
 ```
-
-## Table Style Example
-
-The comparison table uses a small CSS file at `users/static/users/table.css` to
-improve readability. Below is a sample of how the table renders:
-
-| Username | Full name | Employed | In Crowd |
-| -------- | --------- | -------- | -------- |
-| alice    | Alice     | True     | Yes      |
-| bob      | Bob       | False    | No       |

@@ -26,28 +26,7 @@ class CrowdClient:
     def list_active_users(self) -> Iterable[str]:
         """Return usernames for active users."""
         if not self.base_url:
-            sample_names = [
-                "Alice HR",
-                "Bob Sales",
-                "Carol Engineering",
-                "Dave Marketing",
-                "Eve Finance",
-                "Frank Support",
-                "Grace HR",
-                "Heidi Sales",
-                "Ivan Engineering",
-                "Judy Finance",
-                "Mallory HR",
-                "Niaj Sales",
-                "Olivia Engineering",
-                "Peggy Marketing",
-                "Rupert Finance",
-                "Sybil Support",
-                "Trent HR",
-                "Uma Sales",
-                "Victor Engineering",
-                "Wendy Marketing",
-            ]
+            sample_names = ["alice", "bob", "mallory", "carol"]
             for name in sample_names:
                 yield name
             return
