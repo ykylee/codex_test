@@ -20,3 +20,19 @@ class CrowdUsersViewTests(TestCase):
         client = Client()
         response = client.get("/crowd_users/")
         self.assertEqual(response.status_code, 200)
+
+
+class EmployeeDetailViewTests(TestCase):
+    def test_employee_detail_view(self):
+        client = Client()
+        response = client.get("/employee/E001/")
+        self.assertEqual(response.status_code, 200)
+
+
+class SearchEmployeesTests(TestCase):
+    def test_search_results(self):
+        client = Client()
+        response = client.get("/search/?q=Alice")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(any("Alice" in item["full_name"] for item in data["results"]))

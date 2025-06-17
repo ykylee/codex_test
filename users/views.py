@@ -1,3 +1,4 @@
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 
 from .crowd import CrowdClient
@@ -48,3 +49,32 @@ def comparison_view(request):
 
     context = {"employees": employees, "error": error}
     return render(request, "users/comparison.html", context)
+
+
+def employee_detail_view(request, employee_id: str):
+    """Display information for a single employee."""
+    employees = list_employees()
+    employee = next((e for e in employees if e.get("employee_id") == employee_id), None)
+    if not employee:
+        raise Http404("Employee not found")
+    context = {"employee": employee}
+    return render(request, "users/employee_detail.html", context)
+
+
+def search_employees(request):
+    """Return employee records matching a query for the navbar search box."""
+    query = request.GET.get("q", "").lower()
+    results = []
+    if query:
+        for emp in list_employees():
+            if query in emp.get("full_name", "").lower() or query in emp.get("username", "").lower():
+                results.append(
+                    {
+                        "employee_id": emp.get("employee_id"),
+                        "full_name": emp.get("full_name"),
+                        "department": emp.get("department"),
+                    }
+                )
+            if len(results) >= 5:
+                break
+    return JsonResponse({"results": results})

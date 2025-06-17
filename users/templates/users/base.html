@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>User Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7BneFUf3DiXM9ImtvCM0EMN0pwW7Uw+MGAE" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-qQ1IHsd1uQKeV/rpMP7SBi46mTc6yov+pS8G1pnClXrwB3ER4W91bxTF74QTK59n" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'compare' %}">User Management</a>
+    <form class="d-flex me-2 position-relative">
+      <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="employeeSearch" autocomplete="off">
+      <div id="searchResults" class="list-group position-absolute" style="z-index:1000;"></div>
+    </form>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'compare' %}">Comparison</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'employees' %}">Employees</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'crowd_users' %}">Crowd Users</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container mt-4">
+{% block content %}{% endblock %}
+</div>
+<script>
+const searchInput = document.getElementById('employeeSearch');
+const resultsBox = document.getElementById('searchResults');
+if (searchInput) {
+  searchInput.addEventListener('input', function() {
+    const query = this.value.trim();
+    if (!query) {
+      resultsBox.innerHTML = '';
+      resultsBox.style.display = 'none';
+      return;
+    }
+    fetch(`/search/?q=` + encodeURIComponent(query))
+      .then(r => r.json())
+      .then(data => {
+        resultsBox.innerHTML = '';
+        if (!data.results || data.results.length === 0) {
+          resultsBox.style.display = 'none';
+          return;
+        }
+        data.results.forEach(emp => {
+          const a = document.createElement('a');
+          a.className = 'list-group-item list-group-item-action';
+          a.href = `/employee/${emp.employee_id}/`;
+          a.textContent = `${emp.full_name} (${emp.department})`;
+          resultsBox.appendChild(a);
+        });
+        resultsBox.style.display = 'block';
+      });
+  });
+}
+</script>
+</body>
+</html>
