@@ -1,0 +1,25 @@
+{% if error %}
+<p>Error fetching Crowd users: {{ error }}</p>
+{% endif %}
+<table border="1">
+    <tr>
+        <th>Username</th>
+        <th>Full name</th>
+        <th>Employed</th>
+        <th>In Crowd</th>
+    </tr>
+    {% for emp in employees %}
+    <tr>
+        <td>{{ emp.username }}</td>
+        <td>{{ emp.full_name }}</td>
+        <td>{{ emp.is_employed }}</td>
+        <td>
+            {% if emp.username in active_users %}
+                Yes
+            {% else %}
+                No
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
