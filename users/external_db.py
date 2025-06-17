@@ -1,5 +1,5 @@
 import os
-from typing import List, Dict
+from typing import Dict, List
 
 try:
     import psycopg2
@@ -10,16 +10,9 @@ except Exception:  # pragma: no cover - optional dependency
 def _sample_data() -> List[Dict[str, object]]:
     """Return sample employee records for development."""
     return [
-        {"name": "Alice", "employee_id": "E001", "department": "HR", "is_employed": True},
-        {"name": "Bob", "employee_id": "E002", "department": "Sales", "is_employed": True},
-        {"name": "Carol", "employee_id": "E003", "department": "Engineering", "is_employed": True},
-        {"name": "Dave", "employee_id": "E004", "department": "Marketing", "is_employed": True},
-        {"name": "Eve", "employee_id": "E005", "department": "Finance", "is_employed": True},
-        {"name": "Frank", "employee_id": "E006", "department": "Support", "is_employed": True},
-        {"name": "Grace", "employee_id": "E007", "department": "HR", "is_employed": False},
-        {"name": "Heidi", "employee_id": "E008", "department": "Sales", "is_employed": True},
-        {"name": "Ivan", "employee_id": "E009", "department": "Engineering", "is_employed": False},
-        {"name": "Judy", "employee_id": "E010", "department": "Finance", "is_employed": True},
+        {"username": "alice", "full_name": "Alice Doe", "is_employed": True},
+        {"username": "bob", "full_name": "Bob Smith", "is_employed": True},
+        {"username": "carol", "full_name": "Carol Jones", "is_employed": False},
     ]
 
 
@@ -35,10 +28,12 @@ def list_employees() -> List[Dict[str, object]]:
         return _sample_data()
 
     try:
-        conn = psycopg2.connect(host=host, port=port, dbname=name, user=user, password=password)
+        conn = psycopg2.connect(
+            host=host, port=port, dbname=name, user=user, password=password
+        )
         cur = conn.cursor()
         cur.execute(
-            "SELECT name, employee_id, department, is_employed FROM employees"
+            "SELECT username, full_name, is_employed FROM employees"
         )
         rows = cur.fetchall()
         cur.close()
@@ -46,14 +41,13 @@ def list_employees() -> List[Dict[str, object]]:
     except Exception:
         return _sample_data()
 
-    employees = []
+    employees: List[Dict[str, object]] = []
     for row in rows:
         employees.append(
             {
-                "name": row[0],
-                "employee_id": row[1],
-                "department": row[2],
-                "is_employed": row[3],
+                "username": row[0],
+                "full_name": row[1],
+                "is_employed": row[2],
             }
         )
     return employees
