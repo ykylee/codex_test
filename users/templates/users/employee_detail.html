@@ -1,0 +1,10 @@
+{% extends "users/base.html" %}
+{% block content %}
+<h2>{{ employee.full_name }}</h2>
+<ul class="list-group">
+    <li class="list-group-item"><strong>Username:</strong> {{ employee.username }}</li>
+    <li class="list-group-item"><strong>Employee ID:</strong> {{ employee.employee_id }}</li>
+    <li class="list-group-item"><strong>Department:</strong> {{ employee.department }}</li>
+    <li class="list-group-item"><strong>Employed:</strong> {{ employee.is_employed }}</li>
+</ul>
+{% endblock %}
