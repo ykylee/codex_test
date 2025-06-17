@@ -17,6 +17,16 @@ python manage.py runserver
 
 Visit `/compare/` to view the comparison page.
 
+## Testing with coverage
+
+To run the unit tests and generate a coverage report:
+
+```bash
+pip install coverage
+coverage run manage.py test
+coverage report
+```
+
 ## Table Style Example
 
 The comparison table uses a small CSS file at `users/static/users/table.css` to
