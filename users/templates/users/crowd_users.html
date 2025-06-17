@@ -15,7 +15,7 @@
         <th>Employed</th>
     </tr>
     {% for user in users %}
-    <tr>
+    <tr{% if not user.employed %} class="table-danger"{% endif %}>
         <td>{{ user.username }}</td>
         <td>{% if user.employed %}Yes{% else %}No{% endif %}</td>
     </tr>
