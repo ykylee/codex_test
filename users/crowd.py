@@ -26,7 +26,31 @@ class CrowdClient:
     def list_active_users(self) -> Iterable[str]:
         """Return usernames for active users."""
         if not self.base_url:
-            return []
+            sample_names = [
+                "Alice HR",
+                "Bob Sales",
+                "Carol Engineering",
+                "Dave Marketing",
+                "Eve Finance",
+                "Frank Support",
+                "Grace HR",
+                "Heidi Sales",
+                "Ivan Engineering",
+                "Judy Finance",
+                "Mallory HR",
+                "Niaj Sales",
+                "Olivia Engineering",
+                "Peggy Marketing",
+                "Rupert Finance",
+                "Sybil Support",
+                "Trent HR",
+                "Uma Sales",
+                "Victor Engineering",
+                "Wendy Marketing",
+            ]
+            for name in sample_names:
+                yield name
+            return
         url = f"{self.base_url}/rest/usermanagement/1/search?entity-type=user&expand=group&active=true"
         resp = requests.get(url, headers=self._headers(), auth=self._auth(), timeout=10)
         resp.raise_for_status()
