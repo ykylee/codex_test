@@ -9,11 +9,30 @@ except Exception:  # pragma: no cover - optional dependency
 
 def _sample_data() -> List[Dict[str, object]]:
     """Return sample employee records for development."""
-    return [
-        {"username": "alice", "full_name": "Alice Doe", "is_employed": True},
-        {"username": "bob", "full_name": "Bob Smith", "is_employed": True},
-        {"username": "carol", "full_name": "Carol Jones", "is_employed": False},
+    names = [
+        ("Alice", "Engineering"),
+        ("Bob", "Engineering"),
+        ("Carol", "Sales"),
+        ("Dave", "Marketing"),
+        ("Eve", "Finance"),
+        ("Frank", "HR"),
+        ("Grace", "QA"),
+        ("Heidi", "Support"),
+        ("Ivan", "DevOps"),
+        ("Judy", "Management"),
     ]
+    data: List[Dict[str, object]] = []
+    for idx, (name, dept) in enumerate(names, start=1):
+        data.append(
+            {
+                "username": f"{name} {dept}",
+                "full_name": name,
+                "employee_id": f"E{idx:03d}",
+                "department": dept,
+                "is_employed": True,
+            }
+        )
+    return data
 
 
 def list_employees() -> List[Dict[str, object]]:
@@ -33,7 +52,7 @@ def list_employees() -> List[Dict[str, object]]:
         )
         cur = conn.cursor()
         cur.execute(
-            "SELECT username, full_name, is_employed FROM employees"
+            "SELECT username, full_name, employee_id, department, is_employed FROM employees"
         )
         rows = cur.fetchall()
         cur.close()
@@ -47,7 +66,9 @@ def list_employees() -> List[Dict[str, object]]:
             {
                 "username": row[0],
                 "full_name": row[1],
-                "is_employed": row[2],
+                "employee_id": row[2],
+                "department": row[3],
+                "is_employed": row[4],
             }
         )
     return employees
