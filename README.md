@@ -16,3 +16,13 @@ python manage.py runserver
 ```
 
 Visit `/compare/` to view the comparison page.
+
+## Table Style Example
+
+The comparison table uses a small CSS file at `users/static/users/table.css` to
+improve readability. Below is a sample of how the table renders:
+
+| Username | Full name | Employed | In Crowd |
+| -------- | --------- | -------- | -------- |
+| alice    | Alice     | True     | Yes      |
+| bob      | Bob       | False    | No       |
