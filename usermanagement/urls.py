@@ -11,6 +11,8 @@ from users.views import (
     employee_detail_view,
     external_employees_view,
     search_employees,
+    deactivate_user,
+    deactivate_unemployed,
 )
 
 urlpatterns = [
@@ -20,4 +22,6 @@ urlpatterns = [
     path("crowd_users/", crowd_users_view, name="crowd_users"),
     path("employee/<str:employee_id>/", employee_detail_view, name="employee_detail"),
     path("search/", search_employees, name="search_employees"),
+    path("deactivate_user/", deactivate_user, name="deactivate_user"),
+    path("deactivate_unemployed/", deactivate_unemployed, name="deactivate_unemployed"),
 ]
