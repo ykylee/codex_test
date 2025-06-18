@@ -23,18 +23,37 @@ def _sample_data() -> List[Dict[str, object]]:
     ]
     data: List[Dict[str, object]] = []
     for idx, (name, dept) in enumerate(names, start=1):
-        username = f"{name.lower()}"  # login id
-        email = f"{name.lower()}@example.com"
+        userid = name.lower()
+        email = f"{userid}@example.com"
         data.append(
             {
-                "username": username,
-                "full_name": name,
-                "employee_id": f"E{idx:03d}",
-                "department": dept,
-                "is_employed": True,
-                "email": email,
+                "empid": f"E{idx:03d}",
+                "name": name,
+                "enlstnm": name,
+                "enfstnm": name,
+                "bicd": "B1",
+                "binm": "HQ",
+                "deptcd": f"D{idx%3+1}",
+                "deptnm": dept,
+                "jobgrdcd": "J1",
+                "jobgrdnm": "Staff",
+                "frcd": "F1",
+                "frnm": "Engineer",
+                "frenm": "Engineer",
+                "incumbcd": "AA",
+                "pstcd": "P1",
+                "epid": f"ID{idx:03d}",
+                "epoffice_tel": f"02-0000-{idx:04d}",
+                "epmobile": f"010-0000-{idx:04d}",
+                "epuserid": userid,
+                "epmail": email,
+                "eai_dml_type": "",
+                "eai_trans_gb": "",
+                "eai_trans_dt": "",
             }
         )
+    for emp in data:
+        emp["is_employed"] = emp.get("incumbcd") == "AA"
     return data
 
 
@@ -55,7 +74,7 @@ def list_employees() -> List[Dict[str, object]]:
         )
         cur = conn.cursor()
         cur.execute(
-            "SELECT username, full_name, employee_id, department, is_employed, email FROM employees"
+            "SELECT empid, name, enlstnm, enfstnm, bicd, binm, deptcd, deptnm, jobgrdcd, jobgrdnm, frcd, frnm, frenm, incumbcd, pstcd, epid, epoffice_tel, epmobile, epuserid, epmail, eai_dml_type, eai_trans_gb, eai_trans_dt FROM employees"
         )
         rows = cur.fetchall()
         cur.close()
@@ -65,14 +84,36 @@ def list_employees() -> List[Dict[str, object]]:
 
     employees: List[Dict[str, object]] = []
     for row in rows:
+        (empid, name, enlstnm, enfstnm, bicd, binm, deptcd, deptnm, jobgrdcd, jobgrdnm,
+         frcd, frnm, frenm, incumbcd, pstcd, epid, epoffice_tel, epmobile, epuserid,
+         epmail, eai_dml_type, eai_trans_gb, eai_trans_dt) = row
         employees.append(
             {
-                "username": row[0],
-                "full_name": row[1],
-                "employee_id": row[2],
-                "department": row[3],
-                "is_employed": row[4],
-                "email": row[5],
+                "empid": empid,
+                "name": name,
+                "enlstnm": enlstnm,
+                "enfstnm": enfstnm,
+                "bicd": bicd,
+                "binm": binm,
+                "deptcd": deptcd,
+                "deptnm": deptnm,
+                "jobgrdcd": jobgrdcd,
+                "jobgrdnm": jobgrdnm,
+                "frcd": frcd,
+                "frnm": frnm,
+                "frenm": frenm,
+                "incumbcd": incumbcd,
+                "pstcd": pstcd,
+                "epid": epid,
+                "epoffice_tel": epoffice_tel,
+                "epmobile": epmobile,
+                "epuserid": epuserid,
+                "epmail": epmail,
+                "eai_dml_type": eai_dml_type,
+                "eai_trans_gb": eai_trans_gb,
+                "eai_trans_dt": eai_trans_dt,
             }
         )
+    for emp in employees:
+        emp["is_employed"] = emp.get("incumbcd") == "AA"
     return employees

@@ -36,13 +36,13 @@ class SearchEmployeesTests(TestCase):
         response = client.get("/search/?q=Alice")
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        self.assertTrue(any("Alice" in item["full_name"] for item in data["results"]))
+        self.assertTrue(any("Alice" in item["name"] for item in data["results"]))
 
 
 class DeactivateUserTests(TestCase):
     def test_deactivate_user(self):
         client = Client()
-        response = client.post("/deactivate_user/", {"username": "Bob Engineering"})
+        response = client.post("/deactivate_user/", {"epuserid": "bob"})
         self.assertEqual(response.status_code, 200)
 
 

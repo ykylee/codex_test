@@ -52,8 +52,8 @@ if (searchInput) {
         data.results.forEach(emp => {
           const a = document.createElement('a');
           a.className = 'list-group-item list-group-item-action';
-          a.href = `/employee/${emp.employee_id}/`;
-          a.textContent = `${emp.full_name} (${emp.department})`;
+          a.href = `/employee/${emp.empid}/`;
+          a.textContent = `${emp.name} (${emp.deptnm})`;
           resultsBox.appendChild(a);
         });
         resultsBox.style.display = 'block';

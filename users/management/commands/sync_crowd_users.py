@@ -10,7 +10,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         client = CrowdClient()
         active_users = set(client.list_active_users())
-        known_users = set(ExternalEmployee.objects.filter(is_employed=True).values_list("username", flat=True))
+        known_users = set(
+            ExternalEmployee.objects.filter(is_employed=True).values_list("epuserid", flat=True)
+        )
         to_disable = active_users - known_users
         for username in to_disable:
             self.stdout.write(f"Deactivating {username}")
