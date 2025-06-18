@@ -7,14 +7,16 @@
         <th>Employee ID</th>
         <th>Department</th>
         <th>Employed</th>
+        <th>Crowd</th>
     </tr>
     {% for emp in employees %}
-    <tr>
+    <tr{% if emp.email_mismatch %} class="table-warning"{% endif %}>
         <td><a href="{% url 'employee_detail' emp.employee_id %}">{{ emp.username }}</a></td>
         <td>{{ emp.full_name }}</td>
         <td>{{ emp.employee_id }}</td>
         <td>{{ emp.department }}</td>
         <td>{{ emp.is_employed }}</td>
+        <td>{% if emp.in_crowd %}Yes{% elif emp.email_mismatch %}Email mismatch{% else %}No{% endif %}</td>
     </tr>
     {% endfor %}
 </table>
