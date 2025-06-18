@@ -13,13 +13,8 @@
         <th>In Crowd</th>
     </tr>
     {% for emp in employees %}
-<<<<<<< 7tlv66-codex/srs-문서-반영하여-재구현
     <tr>
         <td><a href="{% url 'employee_detail' emp.employee_id %}">{{ emp.username }}</a></td>
-=======
-    <tr data-href="{% url 'employee_detail' emp.employee_id %}">
-        <td>{{ emp.username }}</td>
->>>>>>> main
         <td>{{ emp.full_name }}</td>
         <td>{{ emp.employee_id }}</td>
         <td>{{ emp.department }}</td>
