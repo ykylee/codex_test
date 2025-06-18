@@ -2,20 +2,50 @@
 {% block content %}
 <table class="table table-bordered table-striped table-hover">
     <tr>
-        <th>Username</th>
-        <th>Full name</th>
-        <th>Employee ID</th>
-        <th>Department</th>
-        <th>Employed</th>
+        <th>empid</th>
+        <th>name</th>
+        <th>enlstnm</th>
+        <th>enfstnm</th>
+        <th>bicd</th>
+        <th>binm</th>
+        <th>deptcd</th>
+        <th>deptnm</th>
+        <th>jobgrdcd</th>
+        <th>jobgrdnm</th>
+        <th>frcd</th>
+        <th>frnm</th>
+        <th>frenm</th>
+        <th>incumbcd</th>
+        <th>pstcd</th>
+        <th>epid</th>
+        <th>epoffice_tel</th>
+        <th>epmobile</th>
+        <th>epuserid</th>
+        <th>epmail</th>
         <th>Crowd</th>
     </tr>
     {% for emp in employees %}
     <tr{% if emp.email_mismatch %} class="table-warning"{% endif %}>
-        <td><a href="{% url 'employee_detail' emp.employee_id %}">{{ emp.username }}</a></td>
-        <td>{{ emp.full_name }}</td>
-        <td>{{ emp.employee_id }}</td>
-        <td>{{ emp.department }}</td>
-        <td>{{ emp.is_employed }}</td>
+        <td><a href="{% url 'employee_detail' emp.empid %}">{{ emp.empid }}</a></td>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.enlstnm }}</td>
+        <td>{{ emp.enfstnm }}</td>
+        <td>{{ emp.bicd }}</td>
+        <td>{{ emp.binm }}</td>
+        <td>{{ emp.deptcd }}</td>
+        <td>{{ emp.deptnm }}</td>
+        <td>{{ emp.jobgrdcd }}</td>
+        <td>{{ emp.jobgrdnm }}</td>
+        <td>{{ emp.frcd }}</td>
+        <td>{{ emp.frnm }}</td>
+        <td>{{ emp.frenm }}</td>
+        <td>{{ emp.incumbcd }}</td>
+        <td>{{ emp.pstcd }}</td>
+        <td>{{ emp.epid }}</td>
+        <td>{{ emp.epoffice_tel }}</td>
+        <td>{{ emp.epmobile }}</td>
+        <td>{{ emp.epuserid }}</td>
+        <td>{{ emp.epmail }}</td>
         <td>{% if emp.in_crowd %}Yes{% elif emp.email_mismatch %}Email mismatch{% else %}No{% endif %}</td>
     </tr>
     {% endfor %}

@@ -1,11 +1,11 @@
 {% extends "users/base.html" %}
 {% block content %}
-<h2>{{ employee.full_name }}</h2>
+<h2>{{ employee.name }}</h2>
 <ul class="list-group">
-    <li class="list-group-item"><strong>Username:</strong> {{ employee.username }}</li>
-    <li class="list-group-item"><strong>Employee ID:</strong> {{ employee.employee_id }}</li>
-    <li class="list-group-item"><strong>Department:</strong> {{ employee.department }}</li>
-    <li class="list-group-item"><strong>Email:</strong> {{ employee.email }}</li>
+    <li class="list-group-item"><strong>User ID:</strong> {{ employee.epuserid }}</li>
+    <li class="list-group-item"><strong>Employee ID:</strong> {{ employee.empid }}</li>
+    <li class="list-group-item"><strong>Department:</strong> {{ employee.deptnm }}</li>
+    <li class="list-group-item"><strong>Email:</strong> {{ employee.epmail }}</li>
     <li class="list-group-item"><strong>Employed:</strong> {{ employee.is_employed }}</li>
     <li class="list-group-item"><strong>In Crowd:</strong> {% if employee.in_crowd %}Yes{% else %}No{% endif %}</li>
 </ul>

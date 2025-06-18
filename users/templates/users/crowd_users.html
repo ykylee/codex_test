@@ -11,7 +11,7 @@
 
 <table class="table table-bordered table-striped table-hover">
     <tr>
-        <th>Username</th>
+        <th>User ID</th>
         <th>Employed</th>
         <th>Actions</th>
     </tr>
@@ -28,7 +28,7 @@
         <td>
             <form method="post" action="{% url 'deactivate_user' %}" class="d-inline deactivate-form">
                 {% csrf_token %}
-                <input type="hidden" name="username" value="{{ user.username }}">
+                <input type="hidden" name="epuserid" value="{{ user.username }}">
                 <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
             </form>
         </td>

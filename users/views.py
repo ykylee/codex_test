@@ -18,9 +18,9 @@ def external_employees_view(request):
 
     crowd_map = {u["username"]: u for u in crowd_users}
     for emp in employees:
-        user = crowd_map.get(emp["username"])
+        user = crowd_map.get(emp["epuserid"])
         if user:
-            if user.get("email") == emp.get("email"):
+            if user.get("email") == emp.get("epmail"):
                 emp["in_crowd"] = True
                 emp["email_mismatch"] = False
             else:
@@ -47,13 +47,13 @@ def crowd_users_view(request):
     else:
         error = None
 
-    employees_map = {emp["username"]: emp for emp in list_employees()}
+    employees_map = {emp["epuserid"]: emp for emp in list_employees()}
     users = []
     for user in active_users:
         username = user.get("username")
         emp = employees_map.get(username)
         employed = emp.get("is_employed", False) if emp else False
-        emp_id = emp.get("employee_id") if emp else None
+        emp_id = emp.get("empid") if emp else None
         users.append({"username": username, "employed": employed, "employee_id": emp_id})
 
     paginator = Paginator(users, 20)
@@ -75,8 +75,8 @@ def comparison_view(request):
     crowd_map = {u["username"]: u for u in active_users}
     employees = list_employees()
     for emp in employees:
-        user = crowd_map.get(emp["username"])
-        emp["in_crowd"] = bool(user and user.get("email") == emp.get("email"))
+        user = crowd_map.get(emp["epuserid"])
+        emp["in_crowd"] = bool(user and user.get("email") == emp.get("epmail"))
 
     paginator = Paginator(employees, 20)
     page_obj = paginator.get_page(request.GET.get("page"))
@@ -88,7 +88,7 @@ def comparison_view(request):
 def employee_detail_view(request, employee_id: str):
     """Display information for a single employee."""
     employees = list_employees()
-    employee = next((e for e in employees if e.get("employee_id") == employee_id), None)
+    employee = next((e for e in employees if e.get("empid") == employee_id), None)
     if not employee:
         raise Http404("Employee not found")
 
@@ -97,8 +97,8 @@ def employee_detail_view(request, employee_id: str):
         crowd = {u["username"]: u for u in client.list_active_users()}
     except Exception:
         crowd = {}
-    user = crowd.get(employee.get("username"))
-    in_crowd = bool(user and user.get("email") == employee.get("email"))
+    user = crowd.get(employee.get("epuserid"))
+    in_crowd = bool(user and user.get("email") == employee.get("epmail"))
 
     employee["in_crowd"] = in_crowd
     context = {"employee": employee}
@@ -111,12 +111,12 @@ def search_employees(request):
     results = []
     if query:
         for emp in list_employees():
-            if query in emp.get("full_name", "").lower() or query in emp.get("username", "").lower():
+            if query in emp.get("name", "").lower() or query in emp.get("epuserid", "").lower():
                 results.append(
                     {
-                        "employee_id": emp.get("employee_id"),
-                        "full_name": emp.get("full_name"),
-                        "department": emp.get("department"),
+                        "empid": emp.get("empid"),
+                        "name": emp.get("name"),
+                        "deptnm": emp.get("deptnm"),
                     }
                 )
             if len(results) >= 5:
@@ -127,12 +127,12 @@ def search_employees(request):
 @require_POST
 def deactivate_user(request):
     """Deactivate a single Crowd user."""
-    username = request.POST.get("username")
-    if not username:
-        return JsonResponse({"status": "error", "message": "username required"}, status=400)
+    userid = request.POST.get("epuserid")
+    if not userid:
+        return JsonResponse({"status": "error", "message": "epuserid required"}, status=400)
     client = CrowdClient()
     try:
-        client.deactivate_user(username)
+        client.deactivate_user(userid)
     except Exception as exc:
         return JsonResponse({"status": "error", "message": str(exc)}, status=500)
     return JsonResponse({"status": "success"})
@@ -142,7 +142,7 @@ def deactivate_user(request):
 def deactivate_unemployed(request):
     """Deactivate Crowd accounts not marked as employed."""
     client = CrowdClient()
-    employees = {emp["username"] for emp in list_employees() if emp.get("is_employed")}
+    employees = {emp["epuserid"] for emp in list_employees() if emp.get("is_employed")}
     try:
         for user in client.list_active_users():
             username = user.get("username")
