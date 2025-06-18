@@ -23,13 +23,16 @@ def _sample_data() -> List[Dict[str, object]]:
     ]
     data: List[Dict[str, object]] = []
     for idx, (name, dept) in enumerate(names, start=1):
+        username = f"{name.lower()}"  # login id
+        email = f"{name.lower()}@example.com"
         data.append(
             {
-                "username": f"{name} {dept}",
+                "username": username,
                 "full_name": name,
                 "employee_id": f"E{idx:03d}",
                 "department": dept,
                 "is_employed": True,
+                "email": email,
             }
         )
     return data
@@ -52,7 +55,7 @@ def list_employees() -> List[Dict[str, object]]:
         )
         cur = conn.cursor()
         cur.execute(
-            "SELECT username, full_name, employee_id, department, is_employed FROM employees"
+            "SELECT username, full_name, employee_id, department, is_employed, email FROM employees"
         )
         rows = cur.fetchall()
         cur.close()
@@ -69,6 +72,7 @@ def list_employees() -> List[Dict[str, object]]:
                 "employee_id": row[2],
                 "department": row[3],
                 "is_employed": row[4],
+                "email": row[5],
             }
         )
     return employees
