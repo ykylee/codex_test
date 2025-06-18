@@ -9,7 +9,7 @@
         <th>Employed</th>
     </tr>
     {% for emp in employees %}
-    <tr>
+    <tr data-href="{% url 'employee_detail' emp.employee_id %}">
         <td>{{ emp.username }}</td>
         <td>{{ emp.full_name }}</td>
         <td>{{ emp.employee_id }}</td>
@@ -18,4 +18,20 @@
     </tr>
     {% endfor %}
 </table>
+
+<nav>
+  <ul class="pagination">
+    {% if employees.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ employees.previous_page_number }}">Previous</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">{{ employees.number }} / {{ employees.paginator.num_pages }}</span></li>
+    {% if employees.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ employees.next_page_number }}">Next</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}
