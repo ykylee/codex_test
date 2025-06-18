@@ -27,6 +27,7 @@ class EmployeeDetailViewTests(TestCase):
         client = Client()
         response = client.get("/employee/E001/")
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "In Crowd")
 
 
 class SearchEmployeesTests(TestCase):

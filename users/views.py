@@ -1,5 +1,6 @@
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 
 from .crowd import CrowdClient
@@ -9,7 +10,9 @@ from .external_db import list_employees
 def external_employees_view(request):
     """Display employees from the external database."""
     employees = list_employees()
-    context = {"employees": employees}
+    paginator = Paginator(employees, 20)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    context = {"employees": page_obj}
     return render(request, "users/external_employees.html", context)
 
 
@@ -24,13 +27,17 @@ def crowd_users_view(request):
     else:
         error = None
 
-    employees = {emp["username"]: emp for emp in list_employees()}
+    employees_map = {emp["username"]: emp for emp in list_employees()}
     users = []
     for username in active_users:
-        employed = employees.get(username, {}).get("is_employed", False)
-        users.append({"username": username, "employed": employed})
+        emp = employees_map.get(username)
+        employed = emp.get("is_employed", False) if emp else False
+        emp_id = emp.get("employee_id") if emp else None
+        users.append({"username": username, "employed": employed, "employee_id": emp_id})
 
-    context = {"users": users, "error": error}
+    paginator = Paginator(users, 20)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    context = {"users": page_obj, "error": error}
     return render(request, "users/crowd_users.html", context)
 
 
@@ -48,7 +55,10 @@ def comparison_view(request):
     for emp in employees:
         emp["in_crowd"] = emp["username"] in active_users
 
-    context = {"employees": employees, "error": error}
+    paginator = Paginator(employees, 20)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    context = {"employees": page_obj, "error": error}
     return render(request, "users/comparison.html", context)
 
 
@@ -58,6 +68,14 @@ def employee_detail_view(request, employee_id: str):
     employee = next((e for e in employees if e.get("employee_id") == employee_id), None)
     if not employee:
         raise Http404("Employee not found")
+
+    client = CrowdClient()
+    try:
+        in_crowd = employee.get("username") in set(client.list_active_users())
+    except Exception:
+        in_crowd = False
+
+    employee["in_crowd"] = in_crowd
     context = {"employee": employee}
     return render(request, "users/employee_detail.html", context)
 
