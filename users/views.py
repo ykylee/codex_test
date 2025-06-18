@@ -1,5 +1,6 @@
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 
 from .crowd import CrowdClient
 from .external_db import list_employees
@@ -78,3 +79,31 @@ def search_employees(request):
             if len(results) >= 5:
                 break
     return JsonResponse({"results": results})
+
+
+@require_POST
+def deactivate_user(request):
+    """Deactivate a single Crowd user."""
+    username = request.POST.get("username")
+    if not username:
+        return JsonResponse({"status": "error", "message": "username required"}, status=400)
+    client = CrowdClient()
+    try:
+        client.deactivate_user(username)
+    except Exception as exc:
+        return JsonResponse({"status": "error", "message": str(exc)}, status=500)
+    return JsonResponse({"status": "success"})
+
+
+@require_POST
+def deactivate_unemployed(request):
+    """Deactivate Crowd accounts not marked as employed."""
+    client = CrowdClient()
+    employees = {emp["username"] for emp in list_employees() if emp.get("is_employed")}
+    try:
+        for username in client.list_active_users():
+            if username not in employees:
+                client.deactivate_user(username)
+    except Exception as exc:
+        return JsonResponse({"status": "error", "message": str(exc)}, status=500)
+    return JsonResponse({"status": "success"})

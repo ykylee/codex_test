@@ -36,3 +36,17 @@ class SearchEmployeesTests(TestCase):
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertTrue(any("Alice" in item["full_name"] for item in data["results"]))
+
+
+class DeactivateUserTests(TestCase):
+    def test_deactivate_user(self):
+        client = Client()
+        response = client.post("/deactivate_user/", {"username": "Bob Engineering"})
+        self.assertEqual(response.status_code, 200)
+
+
+class DeactivateUnemployedTests(TestCase):
+    def test_deactivate_unemployed(self):
+        client = Client()
+        response = client.post("/deactivate_unemployed/")
+        self.assertEqual(response.status_code, 200)

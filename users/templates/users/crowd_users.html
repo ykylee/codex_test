@@ -3,15 +3,29 @@
 {% if error %}
 <div class="alert alert-danger" role="alert">Error fetching Crowd users: {{ error }}</div>
 {% endif %}
+
+<form method="post" action="{% url 'deactivate_unemployed' %}" class="mb-3">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning">Deactivate Unemployed Users</button>
+</form>
+
 <table class="table table-bordered table-striped table-hover">
     <tr>
         <th>Username</th>
         <th>Employed</th>
+        <th>Actions</th>
     </tr>
     {% for user in users %}
     <tr{% if not user.employed %} class="table-danger"{% endif %}>
         <td>{{ user.username }}</td>
         <td>{% if user.employed %}Yes{% else %}No{% endif %}</td>
+        <td>
+            <form method="post" action="{% url 'deactivate_user' %}" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="username" value="{{ user.username }}">
+                <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
