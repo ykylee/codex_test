@@ -16,8 +16,14 @@
         <th>Actions</th>
     </tr>
     {% for user in users %}
-    <tr data-href="{% if user.employee_id %}{% url 'employee_detail' user.employee_id %}{% endif %}"{% if not user.employed %} class="table-danger"{% endif %}>
-        <td>{{ user.username }}</td>
+    <tr{% if not user.employed %} class="table-danger"{% endif %}>
+        <td>
+            {% if user.employee_id %}
+                <a href="{% url 'employee_detail' user.employee_id %}">{{ user.username }}</a>
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+        </td>
         <td>{% if user.employed %}Yes{% else %}No{% endif %}</td>
         <td>
             <form method="post" action="{% url 'deactivate_user' %}" class="d-inline deactivate-form">

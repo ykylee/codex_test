@@ -61,13 +61,6 @@ if (searchInput) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('tr[data-href]').forEach(tr => {
-    tr.addEventListener('click', () => {
-      window.location = tr.dataset.href;
-    });
-  });
-});
 </script>
 </body>
 </html>
