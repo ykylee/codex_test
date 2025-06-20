@@ -12,7 +12,8 @@ python manage.py migrate
 ## Running
 
 ```bash
-python manage.py runserver
+# Listen on all network interfaces so the site is reachable from other machines
+python manage.py runserver 0.0.0.0:8000
 ```
 
 Visit `/compare/` to view the comparison table.
